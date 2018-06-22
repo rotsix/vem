@@ -8,6 +8,7 @@ usage() {
   echo "  list: display all disponible environments"
   echo "  get: display current environment"
   echo "  set <env>: set current environment"
+  echo "  link <env> <dest>: link environment to location"
   echo "  gen <env>: generate new environment"
   echo "  del <env>: delete given environment"
   echo "  help: display this help"
@@ -39,6 +40,7 @@ case "$1" in
   	else
   	  echo "current env: $VIRTUAL_ENV"
   	fi
+  	exit 0
   	;;
 
   "set")
@@ -58,6 +60,16 @@ case "$1" in
   	exec "$SHELL"
   	;;
 
+  "link")
+	if [ ! -d "$VENV_PATH/$2" ]; then
+	  echo "env not found: $2"
+	fi
+
+	ln -s "$VENV_PATH/$2" "$3"
+  	echo "env linked ($2) to $3"
+  	exit 0
+  	;;
+
   "gen")
   	if [ -z "$2" ]; then
   	  usage
@@ -65,6 +77,7 @@ case "$1" in
   	fi
   	virtual-env "$VENV_PATH/$2"
   	echo "env created: $2 ($VENV_PATH/$2)"
+  	exit 0
   	;;
 
   "del")
@@ -74,6 +87,7 @@ case "$1" in
   	fi
   	echo "env deleted: $2"
   	rm -rf "$VENV_PATH/$2"
+  	exit 0
   	;;
 
   *)

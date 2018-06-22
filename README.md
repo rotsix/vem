@@ -15,6 +15,7 @@ venv <command>
   list: display all disponible environments
   get: display current environment
   set <env>: set current environment
+  link <env> <dest>: link environment to location
   gen <env>: generate new environment
   del <env>: delete given environment
   help: display help
