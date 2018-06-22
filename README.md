@@ -1,8 +1,8 @@
-# venv
+# vem
 
 > "A manager to manage them all."
 
-`venv` is an ultra-simple python's virtual environments manager (see [here](https://virtualenv.pypa.io/en/stable/) for more).
+`vem` is an ultra-simple python's Virtual Environments Manager (see [here](https://virtualenv.pypa.io/en/stable/) for more).
 
 ## Installation
 
@@ -11,7 +11,7 @@ More than simple, just copy this to your `$PATH`.
 ## Usage
 
 ```
-venv <command>
+vem <command>
   list: display all disponible environments
   get: display current environment
   set <env>: set current environment
@@ -23,7 +23,7 @@ venv <command>
 
 ## Configuration
 
-`venv` uses a virtual environment folder, located at `$HOME/.virtual-env`.
+`vem` uses a virtual environment folder, located at `$HOME/.virtual-env`.
 
 ## Q/A
 
