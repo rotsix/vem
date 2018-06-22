@@ -1,0 +1,82 @@
+#!/bin/bash
+
+VENV_PATH="$HOME/.virtual-env"
+
+usage() {
+  echo "usage:"
+  echo "$(basename "$0") <command>"
+  echo "  list: display all disponible environments"
+  echo "  get: display current environment"
+  echo "  set <env>: set current environment"
+  echo "  gen <env>: generate new environment"
+  echo "  del <env>: delete given environment"
+  echo "  help: display this help"
+}
+
+
+if [ -z "$1" ]; then
+  usage
+  exit 0
+fi
+
+
+case "$1" in
+  "-h"|"--help"|"help"|"h")
+  	usage
+  	exit 0
+  	;;
+
+  "list")
+  	for env in $(find "${VENV_PATH}" -maxdepth 1 -type "d"); do
+  	  echo "$env"
+  	done
+  	exit 0
+  	;;
+
+  "get")
+  	if [ -z "$VIRTUAL_ENV" ]; then
+  	  echo "no env set yet"
+  	else
+  	  echo "current env: $VIRTUAL_ENV"
+  	fi
+  	;;
+
+  "set")
+  	if [ -z "$2" ]; then
+  	  usage
+  	  exit 1
+  	fi
+  	if [ ! -d "$VENV_PATH/$2" ]; then
+  	  echo "env not found: $2"
+  	  exit 2
+  	fi
+
+	echo "env set: $2"
+  	export VIRTUAL_ENV="$VENV_PATH/$2"
+  	export PATH="${VIRTUAL_ENV}/bin:$PATH"
+  	unset "PYTHON_HOME"
+  	exec "$SHELL"
+  	;;
+
+  "gen")
+  	if [ -z "$2" ]; then
+  	  usage
+  	  exit 1
+  	fi
+  	virtual-env "$VENV_PATH/$2"
+  	echo "env created: $2 ($VENV_PATH/$2)"
+  	;;
+
+  "del")
+  	if [ -z "$2" ]; then
+  	  usage
+  	  exit 1
+  	fi
+  	echo "env deleted: $2"
+  	rm -rf "$VENV_PATH/$2"
+  	;;
+
+  *)
+  	usage
+  	exit 1
+esac
