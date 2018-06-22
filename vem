@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VENV_PATH="$HOME/.virtual-env"
+export VENV_PATH="${VENV_PATH:-$HOME/.virtual-env}"
 
 usage() {
   echo "usage:"
@@ -23,74 +23,73 @@ fi
 
 case "$1" in
   "-h"|"--help"|"help"|"h")
-  	usage
-  	exit 0
-  	;;
+    usage
+    exit 0
+    ;;
 
   "list")
-  	for env in $(find "${VENV_PATH}" -maxdepth 1 -type "d"); do
-  	  echo "$env"
-  	done
-  	exit 0
-  	;;
+    # mindepth to hide VENV_PATH from output
+    find "${VENV_PATH}" -mindepth 1 -maxdepth 1 -type "d" -exec basename "{}" \;
+    exit 0
+    ;;
 
   "get")
-  	if [ -z "$VIRTUAL_ENV" ]; then
-  	  echo "no env set yet"
-  	else
-  	  echo "current env: $VIRTUAL_ENV"
-  	fi
-  	exit 0
-  	;;
+    if [ -z "$VIRTUAL_ENV" ]; then
+      echo "no env set yet"
+    else
+      echo "current env: $VIRTUAL_ENV"
+    fi
+    exit 0
+    ;;
 
   "set")
-  	if [ -z "$2" ]; then
-  	  usage
-  	  exit 1
-  	fi
-  	if [ ! -d "$VENV_PATH/$2" ]; then
-  	  echo "env not found: $2"
-  	  exit 2
-  	fi
+    if [ -z "$2" ]; then
+      usage
+      exit 1
+    fi
+    if [ ! -d "$VENV_PATH/$2" ]; then
+      echo "env not found: $2"
+      exit 2
+    fi
 
-	echo "env set: $2"
-  	export VIRTUAL_ENV="$VENV_PATH/$2"
-  	export PATH="${VIRTUAL_ENV}/bin:$PATH"
-  	unset "PYTHON_HOME"
-  	exec "$SHELL"
-  	;;
+    echo "env set: $2"
+    export VIRTUAL_ENV="$VENV_PATH/$2"
+    export PATH="${VIRTUAL_ENV}/bin:$PATH"
+    unset "PYTHON_HOME"
+    exec "$SHELL"
+    ;;
 
   "link")
-	if [ ! -d "$VENV_PATH/$2" ]; then
-	  echo "env not found: $2"
-	fi
+    if [ ! -d "$VENV_PATH/$2" ]; then
+      echo "env not found: $2"
+    fi
 
-	ln -s "$VENV_PATH/$2" "$3"
-  	echo "env linked ($2) to $3"
-  	exit 0
-  	;;
+    ln -s "$VENV_PATH/$2" "$3"
+    echo "env linked ($2) to $3"
+    exit 0
+    ;;
 
   "gen")
-  	if [ -z "$2" ]; then
-  	  usage
-  	  exit 1
-  	fi
-  	virtual-env "$VENV_PATH/$2"
-  	echo "env created: $2 ($VENV_PATH/$2)"
-  	exit 0
-  	;;
+    if [ -z "$2" ]; then
+      usage
+      exit 1
+    fi
+    virtual-env "$VENV_PATH/$2"
+    echo "env created: $2 ($VENV_PATH/$2)"
+    exit 0
+    ;;
 
   "del")
-  	if [ -z "$2" ]; then
-  	  usage
-  	  exit 1
-  	fi
-  	echo "env deleted: $2"
-  	rm -rf "$VENV_PATH/$2"
-  	exit 0
-  	;;
+    if [ -z "$2" ]; then
+      usage
+      exit 1
+    fi
+    echo "env deleted: $2"
+    rm -rf "${VENV_PATH:?}/$2"
+    exit 0
+    ;;
 
   *)
-  	usage
-  	exit 1
+    usage
+    exit 1
 esac
