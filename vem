@@ -56,7 +56,7 @@ case "$1" in
     export VIRTUAL_ENV="$VENV_PATH/$2"
     export PATH="${VIRTUAL_ENV}/bin:$PATH"
     unset "PYTHON_HOME"
-    exec "$SHELL"
+    exec "${SHELL:-bash}"
     ;;
 
   "link")
@@ -74,7 +74,7 @@ case "$1" in
       usage
       exit 1
     fi
-    virtual-env "$VENV_PATH/$2"
+    virtualenv "$VENV_PATH/$2"
     echo "env created: $2 ($VENV_PATH/$2)"
     exit 0
     ;;
