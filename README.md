@@ -17,6 +17,7 @@ vem <command>
   set <env>: set current environment
   link <env> <dest>: link environment to location
   gen <env>: generate new environment
+  tmp: generate a temporary environment
   del <env>: delete given environment
   help: display help
 ```
